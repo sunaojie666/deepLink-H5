@@ -50,15 +50,50 @@
 
   function normalizeLanguage(language) {
     var value = String(language || "").toLowerCase().replace(/_/g, "-");
+    if (!value) return "";
     if (value.indexOf("zh") === 0) return "zh-CN";
-    return "en";
+    if (value.indexOf("en") === 0) return "en";
+    return "";
+  }
+
+  function getUserAgentLanguage() {
+    var matchedLanguage = ua.match(/(?:Language|lang|locale)[/=]([a-z]{2}(?:[_-][a-z]{2,4})?)/i);
+    if (matchedLanguage && matchedLanguage[1]) return matchedLanguage[1];
+
+    matchedLanguage = ua.match(/\b(zh[-_]?(?:cn|hans|hant|tw|hk)?|en[-_]?[a-z]{2})\b/i);
+    if (matchedLanguage && matchedLanguage[1]) return matchedLanguage[1];
+
+    return "";
+  }
+
+  function getIntlLanguage() {
+    if (!window.Intl || !Intl.DateTimeFormat) return "";
+
+    try {
+      return Intl.DateTimeFormat().resolvedOptions().locale || "";
+    } catch (error) {
+      return "";
+    }
   }
 
   function getPreferredLanguage() {
     var previewLanguage = params.get("lang");
-    var browserLanguage = (navigator.languages && navigator.languages[0]) || navigator.language || navigator.userLanguage || "";
-    var matchedLanguage = normalizeLanguage(previewLanguage || browserLanguage);
-    if (matchedLanguage && TRANSLATIONS[matchedLanguage]) return matchedLanguage;
+    var languageCandidates = [previewLanguage]
+      .concat([getUserAgentLanguage()])
+      .concat(navigator.languages || [])
+      .concat([
+        navigator.language,
+        navigator.userLanguage,
+        navigator.browserLanguage,
+        navigator.systemLanguage,
+        getIntlLanguage()
+      ]);
+
+    for (var i = 0; i < languageCandidates.length; i += 1) {
+      var matchedLanguage = normalizeLanguage(languageCandidates[i]);
+      if (matchedLanguage && TRANSLATIONS[matchedLanguage]) return matchedLanguage;
+    }
+
     return "en";
   }
 
