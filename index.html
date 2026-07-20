@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
     <meta name="theme-color" content="#ffffff" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
     <title>VicastCam</title>
@@ -34,6 +34,14 @@
           fetchpriority="high"
         />
 
+        <div class="invite-code" id="inviteCodeRow" hidden>
+          <img class="invite-avatar" src="./assets/invite-avatar.png" alt="" width="128" height="128" />
+          <div class="invite-copy">
+            <span class="invite-person"><strong id="inviterName"></strong><span class="invite-suffix" data-i18n="inviteJoinSuffix"></span></span>
+            <span class="invite-code-line" id="inviteCodeLine"><span data-i18n="inviteCodePrefix"></span><strong id="inviteCodeValue"></strong></span>
+          </div>
+        </div>
+
         <div class="feature-grid" aria-label="VicastCam features">
           <article class="feature-card">
             <img src="./assets/feature-mobile-live.png" alt="" width="121" height="97" />
@@ -51,11 +59,6 @@
             <img src="./assets/feature-live-coverage.png" alt="" width="129" height="129" />
             <span data-i18n="featureLiveCoverage"></span>
           </article>
-        </div>
-
-        <div class="invite-code sr-only" id="inviteCodeRow" hidden>
-          <span data-i18n="inviteCode"></span>
-          <strong id="inviteCodeValue"></strong>
         </div>
 
         <div class="invite-action">
